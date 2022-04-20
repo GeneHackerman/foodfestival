@@ -13,6 +13,32 @@ module.exports = {
         filename: "[name].bundle.js",
         path: __dirname + "/dist",
     },
+    module: {
+        rules: [
+            {
+                // this will search for any img file with jpg ext via regex
+                test: /\.jpg$/,
+                use: [
+                    {
+                        // implements the loader
+                        loader: 'file-loader',
+                        options: {
+                            esModule: false,
+                            name (file) {
+                                return "[path][name].[ext]"
+                            },
+                            publicPath: function(url) {
+                                return url.replace("../", "/assets/");
+                            }
+                        }
+                    },
+                    {
+                        loader: 'image-webpack-loader'
+                    }
+                ]
+            }
+        ]
+    },
     plugins: [
         new webpack.ProvidePlugin({
             $: "jquery",
